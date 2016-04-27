@@ -15,9 +15,23 @@ system("touch $out");
 
 open(OUT, ">$out") or die "Could not open file: $out\n\"$!\"";
 
+print "Document Name (optional): ";
+my $name = chomp(<STDIN>);
+print "Document Description (optional): ";
+my $description = chomp(<STDIN>);
+print "Folder Name: ";
+my $folder_name = chomp(<STDIN>);
+
+
 ## Open the kml file
 print OUT <<"EOT";
-<?xml version='1.0' encoding='UTF-8'?><kml xmlns='http://www.opengis.net/kml/2.2'><Document><name>A map program by any other name would be just as sweet.</name><description><![CDATA[Areas in the New Jersey Morristown Mission]]></description><Folder><name>Auto Generated Layer From Delorme</name>
+<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns='http://www.opengis.net/kml/2.2'>
+<Document>
+<name>$name</name>
+<description><![CDATA[$description]]></description>
+<Folder>
+<name>$folder_name</name>
 EOT
 
 my $inside_begin_block = 0;
@@ -36,7 +50,7 @@ my %dispatch = ( ## Each of these functions returns the current line number.
 for (my $current_line = 0; $current_line < $number_of_lines; $current_line++) {
     my $line = $lines[$current_line];
     chop $line;
-    chop $line; ## I don't know why this makes it work, but it does and I don't have time to figure it out.  Something to do with tab/space settings I think.
+    chop $line; ## I don't know why this makes it work, but it does and I don't have time to figure it out.  Something to do with tab/space settings coming from the delorme file I think.
     if (exists $dispatch{$line}) {
 	$current_line = $dispatch{$line}->($current_line);
     }
