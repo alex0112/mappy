@@ -35,3 +35,4 @@ Becomes:
 	</Folder></Document></kml>
 	
 	
+Also supports Symbols, Lines, and Notes.
