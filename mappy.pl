@@ -4,14 +4,15 @@ use warnings;
 use diagnostics;
 
 ## Reading:
-my $in = "Delorme_english.txt";
+my $in = $ARGV[0];
 open(IN, $in) or die "Could not open file: '$in'\n\"$!\"";
 my @lines = <IN>;
 
 ## Writing:
-system('rm ~/test/maps/output.kml');
-system('touch ~/test/maps/output.kml');
-my $out = "output.kml";
+my $out = $ARGV[1];;
+system("rm $out");
+system("touch $out");
+
 open(OUT, ">$out") or die "Could not open file: $out\n\"$!\"";
 
 ## Open the kml file
@@ -25,7 +26,7 @@ my $polygon_count = 0;
 my $coords_count = 0;
 
 
-my %dispatch = ( ## Each of these functions returns the line it is on when it is finished.
+my %dispatch = ( ## Each of these functions returns the current line number.
     "BEGIN POLY" => \&poly,
     "BEGIN SYMBOL" => \&sym,
     "BEGIN NOTE" => \&note,
@@ -35,7 +36,7 @@ my %dispatch = ( ## Each of these functions returns the line it is on when it is
 for (my $current_line = 0; $current_line < $number_of_lines; $current_line++) {
     my $line = $lines[$current_line];
     chop $line;
-    chop $line; ## I don't know why this makes it work, but it does and I don't have time to figure it out.  Sorry.
+    chop $line; ## I don't know why this makes it work, but it does and I don't have time to figure it out.  Something to do with tab/space settings I think.
     if (exists $dispatch{$line}) {
 	$current_line = $dispatch{$line}->($current_line);
     }
