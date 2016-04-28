@@ -46,6 +46,9 @@ EOT
 my $inside_begin_block = 0;
 my $number_of_lines = scalar(@lines);
 my $polygon_count = 0;
+my $symbol_count = 0;
+my $line_count = 0;
+my $note_count = 0;
 my $coords_count = 0;
 
 
@@ -68,6 +71,19 @@ for (my $current_line = 0; $current_line < $number_of_lines; $current_line++) {
 	die "Input file has a syntax error line $current_line:  '$line'\n Expecting a BEGIN block or an END.\n";
     }
 } 
+
+
+print OUT "</Folder>\n</Document>\n</kml>";
+close(OUT);
+print "SYMBOLS WRITTEN (AS PLACEMARKS): $symbol_count\n";
+print "LINES WRITTEN: $line_count\n";
+print "NOTES WRITTEN: $note_count\n";
+print "POLYGONS WRITTEN: $polygon_count\n";
+print "TOTAL POINTS WRITTEN: $coords_count\n";
+print "SELECTED OUTPUT FILE: $out\n";
+print "END OF LINE.\n";
+
+
 
 
 sub poly() {
