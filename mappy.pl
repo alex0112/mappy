@@ -3,8 +3,7 @@ use strict;
 use warnings;
 use diagnostics;
 
-
-if (not defined $ARGV[0]) {
+if (not defined $ARGV[0]) {  ## This program requires an input file.
     die "Needs an input file\n";
 }
 
@@ -14,7 +13,6 @@ open(IN, $in) or die "Could not open file: '$in'\n\"$!\"";
 my @lines = <IN>;
 
 ## Writing:
-
 my $out = $ARGV[1];
 if (not defined $ARGV[1]) {
     $out = 'output.kml';
@@ -71,10 +69,9 @@ for (my $current_line = 0; $current_line < $number_of_lines; $current_line++) {
     }
     else {
 	close(OUT);
-	die "Input file has a syntax error line $current_line:  '$line'\n Expecting a BEGIN block or an END.\n";
+	die "Input file has a syntax error on line $current_line:  '$line'\n Expecting a BEGIN block or an END.\n";
     }
 } 
-
 
 print OUT "</Folder>\n</Document>\n</kml>";
 close(OUT);
@@ -87,9 +84,8 @@ print "SELECTED OUTPUT FILE: $out\n";
 print "END OF LINE.\n";
 
 
-
-
-sub poly() {
+## Dispatch Table Functions:
+sub poly {
     print "BEGIN POLY...\n";
     $polygon_count++;
     my $current_line = shift; ## I.e. the line number of 'BEGIN POLY'
@@ -133,7 +129,7 @@ EOT
     return $current_line;
 }
 
-sub sym() {
+sub sym {
     print "BEGIN SYM...\n";
     my $current_line = shift;
     $current_line++;
@@ -169,7 +165,7 @@ EOT
     return $current_line;
 }
 
-sub note() {
+sub note {
     print "BEGIN NOTE..\n";
     my $current_line = shift;
     $current_line++;
@@ -189,7 +185,7 @@ sub note() {
     return $current_line;
 }
 
-sub line() {
+sub line {
     print "BEGIN LINE...\n";
     my $current_line = shift;
     $current_line++;
@@ -218,5 +214,5 @@ sub kml_coord {
 
 
 END {
-
+    close(OUT);
 }
