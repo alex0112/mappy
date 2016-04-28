@@ -3,24 +3,33 @@ use strict;
 use warnings;
 use diagnostics;
 
+
+if (not defined $ARGV[0]) {
+    die "Needs an input file\n";
+}
+
 ## Reading:
 my $in = $ARGV[0];
 open(IN, $in) or die "Could not open file: '$in'\n\"$!\"";
 my @lines = <IN>;
 
 ## Writing:
-my $out = $ARGV[1];;
+
+my $out = $ARGV[1];
+if (not defined $ARGV[1]) {
+    $out = 'output.kml';
+}
 system("rm $out");
 system("touch $out");
-
 open(OUT, ">$out") or die "Could not open file: $out\n\"$!\"";
 
+## Fill in some document information
 print "Document Name (optional): ";
-my $name = chomp(<STDIN>);
+chomp(my $name = <STDIN>);
 print "Document Description (optional): ";
-my $description = chomp(<STDIN>);
+chomp(my $description = <STDIN>);
 print "Folder Name: ";
-my $folder_name = chomp(<STDIN>);
+chomp(my $folder_name = <STDIN>);
 
 
 ## Open the kml file
