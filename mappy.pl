@@ -142,13 +142,29 @@ sub sym() {
     chop $line;
     chop $line;
         
-    until ($line eq 'END') {
-	#	print OUT $line;
+    until ($line eq 'END') {  # A symbol looks like '40.776647,-74.160386,FOO,HOUSE'
+	my @symbol_csv = split(',', $line);
+	my $coords = kml_coord("$symbol_csv[0],$symbol_csv[1]");
+	my $note = $symbol_csv[2];
+	my $description = $symbol_csv[3];
+	
+	print OUT <<"EOT";
+	<Placemark>
+	<name>$name</name>
+        <description>$description</description>
+        <Point>
+          <coordinates>$coords</coordinates>
+        </Point>
+      </Placemark>
+EOT
+	$coords_count++;
 	$current_line++;
 	$line = $lines[$current_line];
 	chop $line;
 	chop $line;
+	$symbol_count++;
     }
+
     print "END\n";
     return $current_line;
 }
