@@ -66,6 +66,9 @@ for (my $current_line = 0; $current_line < $number_of_lines; $current_line++) {
     if (exists $dispatch{$line}) {
 	$current_line = $dispatch{$line}->($current_line);
     }
+    elsif ($line eq ' ') {
+	next;
+    }
     else {
 	close(OUT);
 	die "Input file has a syntax error line $current_line:  '$line'\n Expecting a BEGIN block or an END.\n";
@@ -94,7 +97,7 @@ sub poly() {
     
     ## Define a Polygon
     print OUT <<"EOT";
-<Placemark><Polygon><outerBoundaryIs><LinearRing><tessellate>1</tessellate>
+<Placemark>\n<Polygon>\n<outerBoundaryIs>\n<LinearRing>\n<tessellate>1</tessellate>\n
 EOT
 
    print OUT "<coordinates>";
@@ -155,8 +158,6 @@ sub note() {
     print "BEGIN NOTE..\n";
     my $current_line = shift;
     $current_line++;
-
-    
     my $line = $lines[$current_line];
     chop $line;
     chop $line;
@@ -196,16 +197,11 @@ sub line() {
 
 sub kml_coord {
     my $line = shift;
-    $line = join(',', reverse(split(',', $line))); # Because KML expects long/lat instead of lat/long
+    $line = join(',', reverse(split(',', $line))) . ",0"; # Because KML expects long,lat,alt instead of lat,long,alt  (Altitude will always be zero in this program)
     return $line;
 }
 
 
 END {
-    print OUT "</Folder></Document></kml>";
-    close(OUT);
-    print "POLYGONS WRITTEN: $polygon_count\n";
-    print "TOTAL POINTS WRITTEN: $coords_count\n";
-    print "SELECTED OUTPUT FILE: $out\n";
-    print "END OF LINE.\n";
+
 }
