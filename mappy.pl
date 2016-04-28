@@ -21,6 +21,12 @@ system("rm $out");
 system("touch $out");
 open(OUT, ">$out") or die "Could not open file: $out\n\"$!\"";
 
+## Options:
+my $only_polygons = 0;
+if (defined $ARGV[2] && ($ARGV[2] eq '-p' || $ARGV[2] eq '--poly')) {
+    $only_polygons = 1;
+}
+
 ## Fill in some document information
 print "Document Name (optional): ";
 chomp(my $name = <STDIN>);
