@@ -110,11 +110,10 @@ EOT
     chop $line;
     
     until ($line eq 'END') {
-	$polygon_closed = 1 if $line eq $first_coord;  #The Polygon's first point should be the last point as well.
+	$polygon_closed = 1 if $line eq $first_coord;  # The Polygon's first point should be the last point as well.
 	$coords_count++;
 	$line = kml_coord($line);
 	print OUT $line;
-	print OUT ",0\n";
 	$current_line++;
 	$line = $lines[$current_line];
 	chop $line;
