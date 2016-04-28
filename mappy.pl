@@ -199,19 +199,37 @@ sub line {
     my $line = $lines[$current_line];
     chop $line;
     chop $line;
-    
-    until ($line eq 'END') {
-	# print OUT $line;
-	$current_line++;
-	$line = $lines[$current_line];
-	chop $line;
-	chop $line;
+
+    if ($only_polygons) {  ## There should be no lines! (if this option is set)  If you see any set make the first point the last point and create a polygon.
+	$current_line--; # Because poly() will increment $current_line on its own.
+	$current_line = poly($current_line);
+    }
+    else {  ## Draw a line
+	until ($line eq 'END') { # A line looks like '40.725148,-74.323791'
+	    my $coords = kml_coord($line);
+	    print OUT <<"EOT";
+<LineString>
+      <extrude>1</extrude>
+      <tessellate>1</tessellate>
+      <coordinates>
+$coords
+      </coordinates>
+    </LineString>
+EOT
+	    $coords_count++;
+	    $line_count++;
+	    $current_line++;
+	    $line = $lines[$current_line];
+	    chop $line;
+	    chop $line;
+	}
     }
 
     print "END\n";
     return $current_line;
 }
 
+## Utility Functions:
 sub kml_coord {
     my $line = shift;
     $line = join(',', reverse(split(',', $line))) . ",0"; # Because KML expects long,lat,alt instead of lat,long,alt  (Altitude will always be zero in this program)
