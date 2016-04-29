@@ -213,7 +213,7 @@ sub line {
     chop $line;
     chop $line;
 
-    if ($only_polygons) {  ## There should be no lines! (if this option is set)  If you see any set make the first point the last point and create a polygon.
+    if ($only_polygons) {  ## There should be no lines! (if this option is set)  If you see any lines make the first point the last point and create a polygon.
 	$current_line--; # Because poly() will increment $current_line on its own.
 	$current_line = poly($current_line);
     }
