@@ -227,7 +227,9 @@ sub line {
     chop $line;
     chop $line;
 
-    if ($only_polygons) {  ## There should be no lines! (if this option is set)  If you see any lines make the first point the last point and create a polygon.
+    
+    my $line_after_next = $current_line + 2;
+    if ($only_polygons && ($lines[$line_after_next] ne 'END')) {  ## There should be no lines! (if this option is set)  If you see any lines make the first point the last point and create a polygon. (This excludes lines that are only two points long)
 	$current_line--; # Because poly() will increment $current_line on its own.
 	$current_line = poly($current_line);
     }
