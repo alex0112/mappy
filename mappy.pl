@@ -178,9 +178,22 @@ sub note {
     my $line = $lines[$current_line];
     chop $line;
     chop $line;
+
     
-    until ($line eq 'END') {
-#	print OUT $line;
+    until ($line eq 'END') { # A note looks like '40.709302,-74.355980,Note text'
+	my @note_csv = split(',', $line);
+	my $coords = kml_coord("$note_csv[0],$note_csv[1]");
+	my $note = $note_csv[2];
+
+	print OUT <<"EOT";
+<Placemark>
+    <name>Note: </name>
+    <description>$note</description>
+    <Point>
+      <coordinates>$coords</coordinates>
+    </Point>
+  </Placemark>
+EOT
 	$current_line++;
 	$line = $lines[$current_line];
 	chop $line;
