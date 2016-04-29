@@ -54,7 +54,11 @@ my $symbol_count = 0;
 my $line_count = 0;
 my $note_count = 0;
 my $coords_count = 0;
-
+my %icons = (
+    'HOUSE' => 'http://maps.google.com/mapfiles/kml/pal3/icon56.png',
+    'CHURCH' => 'http://maps.google.com/mapfiles/kml/pal2/icon11.png',
+    'DEFAULT' => 'http://maps.google.com/mapfiles/ms/micons/red-dot.png',
+);
 
 my %dispatch = ( ## Each of these functions returns the current line number.
     "BEGIN POLY" => \&poly,
@@ -149,7 +153,13 @@ sub sym {
 	my $coords = kml_coord("$symbol_csv[0],$symbol_csv[1]");
 	my $note = $symbol_csv[2];
 	my $description = $symbol_csv[3];
-	
+
+	if (not defined $icons{$symbol_csv[3]}) {
+	    warn "Symbol $symbol_csv[3] not defined at $in line $current_line.\nIt's possible that there is a syntax error in the input file.  But it may also be that you have attempted to use an undefined symbol. (Since symbol support is sparse, feel free to contribute to this project on github: https://github.com/alex0112/mappy)\nUsing Default Symbol...\n";
+	    $symbol_csv[3] = 'DEFAULT';
+	}
+
+
 	print OUT <<"EOT";
 	<Placemark>
 	<name>$name</name>
@@ -157,8 +167,12 @@ sub sym {
         <Point>
           <coordinates>$coords</coordinates>
         </Point>
-      </Placemark>
+<description>$symbol_csv[2]</description>
+<styleUrl>$icons{$symbol_csv[3]}</styleUrl>
+
+ </Placemark>
 EOT
+#<IconStyle> <Icon> <href>$icons{$symbol_csv[3]}</href> </Icon></IconStyle>
 	$coords_count++;
 	$current_line++;
 	$line = $lines[$current_line];
