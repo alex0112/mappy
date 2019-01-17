@@ -3,6 +3,8 @@ Quick program to turn Delorme Street atlas plus draw files into KML files for us
 
 Created to solve [this problem](https://gis.stackexchange.com/q/188693/70893)
 
+asdf
+
 ## Usage:
 `perl mappy.pl inputfile.txt outputfile.kml`
 
