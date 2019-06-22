@@ -35,7 +35,6 @@ chomp(my $description = <STDIN>);
 print "Folder Name: ";
 chomp(my $folder_name = <STDIN>);
 
-
 ## Open the kml file
 print OUT <<"EOT";
 <?xml version='1.0' encoding='UTF-8'?>
@@ -91,12 +90,9 @@ print "NOTES WRITTEN: $note_count\n";
 print "POLYGONS WRITTEN: $polygon_count\n";
 print "TOTAL POINTS WRITTEN: $coords_count\n";
 print "SELECTED OUTPUT FILE: $out\n";
-print "END OF LINE.\n";
-
 
 ## Dispatch Table Functions:
 sub poly {
-    print "BEGIN POLY...\n";
     $polygon_count++;
     my $current_line = shift; ## I.e. the line number of 'BEGIN POLY'
     $current_line++; ## next line
@@ -135,12 +131,10 @@ EOT
 </Polygon>
 </Placemark>
 EOT
-    print "END\n";
     return $current_line;
 }
 
 sub sym {
-    print "BEGIN SYM...\n";
     my $current_line = shift;
     $current_line++;
 
@@ -158,7 +152,6 @@ sub sym {
 	    warn "Symbol $symbol_csv[3] not defined at $in line $current_line.\nIt's possible that there is a syntax error in the input file.  But it may also be that you have attempted to use an undefined symbol. (Since symbol support is sparse, feel free to contribute to this project on github: https://github.com/alex0112/mappy)\nUsing Default Symbol...\n";
 	    $symbol_csv[3] = 'DEFAULT';
 	}
-
 
 	print OUT <<"EOT";
 	<Placemark>
@@ -181,18 +174,15 @@ EOT
 	$symbol_count++;
     }
 
-    print "END\n";
     return $current_line;
 }
 
 sub note {
-    print "BEGIN NOTE..\n";
     my $current_line = shift;
     $current_line++;
     my $line = $lines[$current_line];
     chop $line;
     chop $line;
-
     
     until ($line eq 'END') { # A note looks like '40.709302,-74.355980,Note text'
 	my @note_csv = split(',', $line);
@@ -214,12 +204,10 @@ EOT
 	chop $line;
     }
 
-    print "END\n";
     return $current_line;
 }
 
 sub line {
-    print "BEGIN LINE...\n";
     my $current_line = shift;
     $current_line++;
         
@@ -254,7 +242,6 @@ EOT
 	}
     }
 
-    print "END\n";
     return $current_line;
 }
 
