@@ -1,5 +1,5 @@
 # mappy
-Quick program to turn old [Delorme](https://en.wikipedia.org/wiki/DeLorme) Street Atlas Plus draw files into KML files for use in google maps.
+Quick script to turn old [Delorme](https://en.wikipedia.org/wiki/DeLorme) Street Atlas Plus draw files into KML files for use in google maps.
 
 Created to solve [this problem](https://gis.stackexchange.com/q/188693/70893)
 
