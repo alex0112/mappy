@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-#use diagnostics;
 
 if (not defined $ARGV[0]) {  ## This program requires an input file.
     die "Needs an input file\n";
